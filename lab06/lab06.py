@@ -51,6 +51,20 @@ def check_delimiters(expr):
     delim_closers = '})]>'
 
     ### BEGIN SOLUTION
+    lst = []
+    for i in expr:
+        if(i in delim_openers):
+            lst.append(i)
+        elif(i in delim_closers):
+            pos = delim_closers.index(i)
+            if(len(lst) > 0) and (delim_openers[pos] == lst[len(lst)-1]):
+                lst.pop()
+            else:
+                return False
+    if(len(lst) == 0):
+        return True
+    else:
+        return False
     ### END SOLUTION
 
 ################################################################################
@@ -121,6 +135,39 @@ def infix_to_postfix(expr):
     postfix = []
     toks = expr.split()
     ### BEGIN SOLUTION
+    for t in toks:
+        flag = True
+        while flag:
+            if t.isdigit():
+                postfix.append(t)
+                flag = False
+            elif ops.empty() == True or ops.peek() == '(':
+                ops.push(t)
+                flag = False
+            elif t == '(':
+                ops.push(t)
+                flag = False
+            elif t == ')':
+                flag2 = True
+                while flag2:
+                    op = ops.pop()
+                    if op in prec.keys():
+                        postfix.append(op)
+                    elif op == '(':
+                        flag2 = False
+                flag = False
+            elif prec[t] > prec[ops.peek()]:
+                ops.push(t)
+                flag = False
+            elif prec[t] == prec[ops.peek()]:
+                postfix.append(ops.pop())
+                ops.push(t)
+                flag = False
+            elif prec[t] < prec[ops.peek()]:
+                postfix.append(ops.pop())
+                
+    for i in ops:
+        postfix.append(i)
     ### END SOLUTION
     return ' '.join(postfix)
 
@@ -160,25 +207,54 @@ class Queue:
         self.data = [None] * limit
         self.head = -1
         self.tail = -1
-
-    ### BEGIN SOLUTION
-    ### END SOLUTION
+	### BEGIN SOLUTION
+        self.limit = limit
+        self.count = 0
+        ### END SOLUTION
 
     def enqueue(self, val):
         ### BEGIN SOLUTION
+	if ((self.tail + 1) % self.limit == self.head):
+            raise RuntimeError
+        elif (self.head == -1):
+            self.head = 0
+            self.tail = 0
+            self.data[self.tail] = val
+        else:
+            self.tail = (self.tail + 1) % self.limit
+            self.data[self.tail] = val
         ### END SOLUTION
 
     def dequeue(self):
         ### BEGIN SOLUTION
+	if (self.head == -1):
+            raise RuntimeError
+
+        elif (self.head == self.tail):
+            temp = self.data[self.head]
+            self.head = -1
+            self.tail = -1
+            return temp
+        else:
+            temp = self.data[self.head]
+            self.head = (self.head + 1) % self.limit
+            return temp
         ### END SOLUTION
 
     def resize(self, newsize):
         assert(len(self.data) < newsize)
         ### BEGIN SOLUTION
+	ndata = [None]*newsize
+        for i in range(len(self.data) -1):
+            ndata[i] = self.data[i]
+        self.data = ndata
+        self.head = -1
+        self.tail = self.count -1
         ### END SOLUTION
 
     def empty(self):
         ### BEGIN SOLUTION
+	return self.head == self.tail == -1
         ### END SOLUTION
 
     def __bool__(self):
@@ -194,6 +270,10 @@ class Queue:
 
     def __iter__(self):
         ### BEGIN SOLUTION
+	while self.count > 0:
+            yield self.data[self.tail]
+            self.tail = (self.tail + 1) % self.data
+            self.count -= 1
         ### END SOLUTION
 
 ################################################################################
