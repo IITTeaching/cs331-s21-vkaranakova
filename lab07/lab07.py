@@ -57,7 +57,20 @@ class ExtensibleHashTable:
 
     def __delitem__(self, key):
         # BEGIN SOLUTION
-        pass
+        self.nitems -= 1
+        hkey = hash(key) % self.n_buckets
+        if self.buckets[hkey] is None:
+            raise KeyError
+        while self.buckets[hkey][0]!= key:
+            hkey2 = (key + 1) % self.n_buckets
+            if hkey2 == self.n_buckets:
+                hkey2 = 0
+            hkey = hkey2
+        idx = hkey
+        while idx is None:
+            self.nitems += 1
+            break
+        self.buckets[idx] = None
         # END SOLUTION
 
     def __contains__(self, key):
