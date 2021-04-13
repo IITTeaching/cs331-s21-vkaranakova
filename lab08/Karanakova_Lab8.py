@@ -298,7 +298,7 @@ def main():
               test_key_heap_5,
               test_median_1,
               test_median_2,
-              #test_median_3,
+              test_median_3,
               test_topk_students
               ]:
         say_test(t)
