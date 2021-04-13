@@ -156,7 +156,7 @@ def test_key_heap_5():
         tc.assertEqual(x, h.pop())
 
 
-# In[30]:
+# In[37]:
 
 
 ################################################################################
@@ -219,7 +219,7 @@ def test_median_3():
     tc.assertEqual(m_final, running[-1])
 
 
-# In[35]:
+# In[38]:
 
 
 ################################################################################
@@ -227,31 +227,7 @@ def test_median_3():
 ################################################################################
 def topk(items, k, keyf):
     ### BEGIN SOLUTION
-    top = [items[i] for i in range(len(items))]
-    f = {i: get_age(i) for i in (items)}
-    for j in range(k):
-        if items[j] in f.keys():
-            f[items[j]] += 1
-        else:
-            f[items[j]] = 1
-        top[k] = items[j]
-        i = top.index(items[j])
-        i -= 1
-        
-        while i >= 0:
-            if(f[top[i]] < f[top[i + 1]]):
-                t = top[i]
-                top[i] = top[i + 1]
-                top[i + 1] = t
-            elif((f[top[i]] == f[top[i + 1]]) and (top[i] > top[i + 1])):
-                t = top[i]
-                top[i] = top[i + 1]
-                top[i + 1] = t
-            else:
-                break
-            i -= 1
-        i = 0
-    return top
+    pass
     ### END SOLUTION
 
 ################################################################################
@@ -312,5 +288,29 @@ if __name__ == '__main__':
 # In[ ]:
 
 
-
+top = [items[i] for i in range(len(items))]
+    f = {i: get_age(i) for i in (items)}
+    for j in range(k):
+        if items[j] in f.keys():
+            f[items[j]] += 1
+        else:
+            f[items[j]] = 1
+        top[k] = items[j]
+        i = top.index(items[j])
+        i -= 1
+        
+        while i >= 0:
+            if(f[top[i]] < f[top[i + 1]]):
+                t = top[i]
+                top[i] = top[i + 1]
+                top[i + 1] = t
+            elif((f[top[i]] == f[top[i + 1]]) and (top[i] > top[i + 1])):
+                t = top[i]
+                top[i] = top[i + 1]
+                top[i + 1] = t
+            else:
+                break
+            i -= 1
+        i = 0
+    return top
 
