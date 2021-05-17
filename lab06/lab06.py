@@ -165,7 +165,7 @@ def infix_to_postfix(expr):
                 flag = False
             elif prec[t] < prec[ops.peek()]:
                 postfix.append(ops.pop())
-                
+
     for i in ops:
         postfix.append(i)
     ### END SOLUTION
@@ -207,14 +207,14 @@ class Queue:
         self.data = [None] * limit
         self.head = -1
         self.tail = -1
-	### BEGIN SOLUTION
+    ### BEGIN SOLUTION
         self.limit = limit
         self.count = 0
         ### END SOLUTION
 
     def enqueue(self, val):
         ### BEGIN SOLUTION
-	if ((self.tail + 1) % self.limit == self.head):
+    if ((self.tail + 1) % self.limit == self.head):
             raise RuntimeError
         elif (self.head == -1):
             self.head = 0
@@ -227,7 +227,7 @@ class Queue:
 
     def dequeue(self):
         ### BEGIN SOLUTION
-	if (self.head == -1):
+    if (self.head == -1):
             raise RuntimeError
 
         elif (self.head == self.tail):
@@ -244,7 +244,7 @@ class Queue:
     def resize(self, newsize):
         assert(len(self.data) < newsize)
         ### BEGIN SOLUTION
-	ndata = [None]*newsize
+    ndata = [None]*newsize
         for i in range(len(self.data) -1):
             ndata[i] = self.data[i]
         self.data = ndata
@@ -254,7 +254,7 @@ class Queue:
 
     def empty(self):
         ### BEGIN SOLUTION
-	return self.head == self.tail == -1
+    return self.head == self.tail == -1
         ### END SOLUTION
 
     def __bool__(self):
@@ -270,7 +270,7 @@ class Queue:
 
     def __iter__(self):
         ### BEGIN SOLUTION
-	while self.count > 0:
+    while self.count > 0:
             yield self.data[self.tail]
             self.tail = (self.tail + 1) % self.data
             self.count -= 1
@@ -300,66 +300,66 @@ def test_queue_implementation_1():
 
 # points: 13
 def test_queue_implementation_2():
-	tc = TestCase()
+    tc = TestCase()
 
-	q = Queue(10)
+    q = Queue(10)
 
-	for i in range(6):
-	    q.enqueue(i)
+    for i in range(6):
+        q.enqueue(i)
 
-	tc.assertEqual(q.data.count(None), 4)
+    tc.assertEqual(q.data.count(None), 4)
 
-	for i in range(5):
-	    q.dequeue()
+    for i in range(5):
+        q.dequeue()
 
-	tc.assertFalse(q.empty())
-	tc.assertEqual(q.data.count(None), 9)
-	tc.assertEqual(q.head, q.tail)
-	tc.assertEqual(q.head, 5)
+    tc.assertFalse(q.empty())
+    tc.assertEqual(q.data.count(None), 9)
+    tc.assertEqual(q.head, q.tail)
+    tc.assertEqual(q.head, 5)
 
-	for i in range(9):
-	    q.enqueue(i)
+    for i in range(9):
+        q.enqueue(i)
 
-	with tc.assertRaises(RuntimeError):
-	    q.enqueue(10)
+    with tc.assertRaises(RuntimeError):
+        q.enqueue(10)
 
-	for x, y in zip(q, [5] + list(range(9))):
-	    tc.assertEqual(x, y)
+    for x, y in zip(q, [5] + list(range(9))):
+        tc.assertEqual(x, y)
 
-	tc.assertEqual(q.dequeue(), 5)
-	for i in range(9):
-	    tc.assertEqual(q.dequeue(), i)
+    tc.assertEqual(q.dequeue(), 5)
+    for i in range(9):
+        tc.assertEqual(q.dequeue(), i)
 
-	tc.assertTrue(q.empty())
+    tc.assertTrue(q.empty())
 
 # points: 14
 def test_queue_implementation_3():
-	tc = TestCase()
+    tc = TestCase()
 
-	q = Queue(5)
-	for i in range(5):
-	    q.enqueue(i)
-	for i in range(4):
-	    q.dequeue()
-	for i in range(5, 9):
-	    q.enqueue(i)
+    q = Queue(5)
+    for i in range(5):
+        q.enqueue(i)
+    for i in range(4):
+        q.dequeue()
+    for i in range(5, 9):
+        q.enqueue(i)
 
-	with tc.assertRaises(RuntimeError):
-	    q.enqueue(10)
+    with tc.assertRaises(RuntimeError):
+        q.enqueue(10)
 
-	q.resize(10)
+    q.resize(10)
 
-	for x, y in zip(q, range(4, 9)):
-	    tc.assertEqual(x, y)
+    for x, y in zip(q, range(4, 9)):
+        tc.assertEqual(x, y)
 
-	for i in range(9, 14):
-	    q.enqueue(i)
+    for i in range(9, 14):
+        q.enqueue(i)
 
-	for i in range(4, 14):
-	    tc.assertEqual(q.dequeue(), i)
+    for i in range(4, 14):
+        tc.assertEqual(q.dequeue(), i)
 
-	tc.assertTrue(q.empty())
-	tc.assertEqual(q.head, -1)
+    tc.assertTrue(q.empty())
+    tc.assertEqual(q.head, -1)
 
 ################################################################################
 # TEST HELPERS

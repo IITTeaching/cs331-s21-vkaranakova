@@ -1,5 +1,12 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[99]:
+
+
 from unittest import TestCase
 import random
+import statistics
 
 def quicksort(lst,pivot_fn):
     qsort(lst,0,len(lst) - 1,pivot_fn)
@@ -46,6 +53,10 @@ def pivot_median_of_three(lst,low,high):
     lst[low], lst[pivot] = lst[pivot], lst[low]
     return pivot_first(lst,low,high)
     ### END SOLUTION
+
+
+# In[100]:
+
 
 ################################################################################
 # TEST CASES
@@ -111,3 +122,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

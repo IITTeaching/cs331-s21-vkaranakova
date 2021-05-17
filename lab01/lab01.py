@@ -2,6 +2,7 @@ import unittest
 import sys
 from contextlib import contextmanager
 from io import StringIO
+import math
 
 #################################################################################
 # TESTING OUTPUTS
@@ -22,7 +23,11 @@ def captured_output():
 
 # implement this function
 def is_perfect(n):
-    pass
+    sum = 0
+    for i in range(1, n):
+        if n % i == 0:
+            sum += i
+    return sum == n
 
 # (3 points)
 def test1():
@@ -34,13 +39,20 @@ def test1():
     for n in range(30, 450):
         tc.assertFalse(is_perfect(n), '{} should not be perfect'.format(n))
 
+
 #################################################################################
 # EXERCISE 2
 #################################################################################
 
 # implement this function
 def multiples_of_3_and_5(n):
-    pass
+    sum = 0
+    n -= 1
+    while n > 0:
+        if n % 3 == 0 or n % 5 == 0:
+            sum += n
+        n -= 1
+    print(sum)
 
 # (3 points)
 def test2():
@@ -49,11 +61,20 @@ def test2():
     tc.assertEqual(multiples_of_3_and_5(500), 57918)
     tc.assertEqual(multiples_of_3_and_5(1000), 233168)
 
+
 #################################################################################
 # EXERCISE 3
 #################################################################################
 def integer_right_triangles(p):
-    pass
+    count = 0
+    for a in range(1, p):
+        for b in range(1, p):
+            if a + b + math.sqrt(a**2 + b**2) == p:
+                count += 1
+    print(count/2)
+
+
+
 
 def test3():
     tc = unittest.TestCase()
@@ -67,7 +88,31 @@ def test3():
 
 # implement this function
 def gen_pattern(chars):
-    pass
+    if len(chars) == 1:
+        print(chars)
+
+    else:
+        diamond = []
+        chars = chars[::-1]
+        l = len(chars)
+        dots = (l -1)*2
+        count = 1
+        for i in range (0, l):
+            row = ''
+            row = row + '.' * dots
+            for j in range(0, count):
+                row = row + chars[j] + '.'
+            row = row[0:-1:]
+            row = row + row[len(row)-2::-1]
+            print(row)
+            diamond.append(row)
+            dots -= 2
+            count += 1
+        diamond.pop()
+        diamond.reverse()
+        for k in diamond:
+            print(k)
+
 
 def test4():
     tc = unittest.TestCase()
@@ -147,11 +192,11 @@ p.o.n.m.l.k.j.i.h.g.f.e.d.c.b.a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p
 #################################################################################
 # RUN ALL TESTS
 #################################################################################
-def main():
+def main1():
     test1()
     test2()
     test3()
     test4()
 
-if __name__ == '__main__':
-    main()
+if __name__ == '__main1__':
+    main1()

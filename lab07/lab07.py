@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[81]:
+
+
 import random
 from unittest import TestCase
 
@@ -16,8 +22,8 @@ class ExtensibleHashTable:
         # BEGIN_SOLUTION
         pass
         # END_SOLUTION
-
-    def __getitem__(self,  key):
+        
+    def __getitem__(self, key):
         # BEGIN_SOLUTION
         hkey = hash(key) % self.n_buckets
         if self.buckets[hkey] is None:
@@ -53,6 +59,7 @@ class ExtensibleHashTable:
             for tuple in pbuckets:
                 if tuple is not None:
                     self[tuple[0]] = tuple[1]
+            
         # END_SOLUTION
 
     def __delitem__(self, key):
@@ -104,7 +111,7 @@ class ExtensibleHashTable:
             if k != None:
                 yield self.buckets[i][1]
         ### END SOLUTION
-
+        
     def items(self):
         ### BEGIN SOLUTION
         for i in range(len(self.buckets)):
@@ -118,6 +125,13 @@ class ExtensibleHashTable:
 
     def __repr__(self):
         return str(self)
+
+
+# In[82]:
+
+
+import random
+from unittest import TestCase
 
 ################################################################################
 # TEST CASES
@@ -252,3 +266,10 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# In[ ]:
+
+
+
+

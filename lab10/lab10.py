@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[26]:
+
+
 from unittest import TestCase
 import random
 
@@ -15,6 +21,9 @@ class AVLTree:
 
         def rotate_left(self):
             ### BEGIN SOLUTION
+            n = self.right
+            self.val, n.val = n.val, self.val
+            self.right, n.right, self.left, n.left = n.right, n.left, n, self.left
             ### END SOLUTION
 
         @staticmethod
@@ -31,16 +40,82 @@ class AVLTree:
     @staticmethod
     def rebalance(t):
         ### BEGIN SOLUTION
+        if AVLTree.Node.height(t.left) > AVLTree.Node.height(t.right):
+            if AVLTree.Node.height(t.left.left) >= AVLTree.Node.height(t.left.right):
+                t.rotate_right()
+            else:
+                t.left.rotate_left()
+                t.rotate_right()
+        else:
+            if AVLTree.Node.height(t.right.right) >= AVLTree.Node.height(t.right.left):
+                t.rotate_left()
+            else:
+                t.right.rotate_right()
+                t.rotate_left()
         ### END SOLUTION
 
     def add(self, val):
         assert(val not in self)
         ### BEGIN SOLUTION
+        def add2(node): 
+            if not node:
+                return AVLTree.Node(val)
+            elif val < node.val:
+                node.left = add2(node.left)
+            else:
+                node.right = add2(node.right)
+                
+            if abs(AVLTree.Node.height(node.left) - AVLTree.Node.height(node.right)) >= 2:
+                AVLTree.rebalance(node)
+            return node
+        
+        self.root = add2(self.root)
+        self.size += 1
         ### END SOLUTION
 
     def __delitem__(self, val):
         assert(val in self)
         ### BEGIN SOLUTION
+        def delitem2(node):
+            if val < node.val:
+                node.left = delitem2(node.left)
+            elif val > node.val:
+                node.right = delitem2(node.right)
+            else:
+                if not node.left and not node.right:
+                    return None
+                elif node.left and not node.right:
+                    return node.left
+                elif node.right and not node.left:
+                    return node.right
+                else:
+                    to_del = node.left
+                    if not to_del.right:
+                        node.left = to_del.left
+                    else:
+                        par = to_del
+                        to_del = par.right
+                        to_fix = [par]
+                        while to_del.right:
+                            par = par.right
+                            to_fix.append(par)
+                            to_del = to_del.right
+
+                        par.right = to_del.left
+                        
+                        for n in to_fix[::-1]:
+                            if abs(AVLTree.Node.height(n.left) - AVLTree.Node.height(n.right)) >= 2:
+                                AVLTree.rebalance(n)                        
+                        
+                    node.val = to_del.val
+
+            if abs(AVLTree.Node.height(node.left) - AVLTree.Node.height(node.right)) >= 2:
+                AVLTree.rebalance(node)
+                    
+            return node
+                        
+        self.root = delitem2(self.root)
+        self.size -= 1
         ### END SOLUTION
 
     def __contains__(self, val):
@@ -97,6 +172,10 @@ class AVLTree:
             else:
                 return max(1+height_rec(t.left), 1+height_rec(t.right))
         return height_rec(self.root)
+
+
+# In[27]:
+
 
 ################################################################################
 # TEST CASES
@@ -235,3 +314,16 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+

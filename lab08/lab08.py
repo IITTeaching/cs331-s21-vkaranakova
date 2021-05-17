@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[20]:
+
+
 from unittest import TestCase
 import random
 import functools
@@ -24,10 +30,30 @@ class Heap:
 
     def heapify(self, idx=0):
         ### BEGIN SOLUTION
+         while True:
+            left = Heap._left(idx)
+            right = Heap._right(idx)
+            maxi = idx
+            if left < len(self) and self.key(self.data[left]) > self.key(self.data[idx]):
+                maxi = left
+            if right < len(self) and self.key(self.data[right]) > self.key(self.data[maxi]):
+                maxi = right
+            if maxi != idx:
+                self.data[idx], self.data[maxi] = self.data[maxi], self.data[idx]
+                idx = maxi
+            else:
+                break
         ### END SOLUTION
 
     def add(self, x):
         ### BEGIN SOLUTION
+        self.data.append(x)
+        idx = len(self.data) - 1
+        parent = Heap._parent(idx)
+        while idx > 0 and self.key(self.data[idx]) > self.key(self.data[parent]):
+            self.data[idx], self.data[parent] = self.data[parent], self.data[idx]
+            idx = parent
+            parent = Heap._parent(idx)
         ### END SOLUTION
 
     def peek(self):
@@ -51,6 +77,10 @@ class Heap:
 
     def __repr__(self):
         return repr(self.data)
+
+
+# In[21]:
+
 
 ################################################################################
 # 1. IMPLEMENT THIS HEAP
@@ -125,11 +155,30 @@ def test_key_heap_5():
     for x in reversed(sorted(range(-1000, 1000, 3), key=lambda x:abs(x))):
         tc.assertEqual(x, h.pop())
 
+
+# In[37]:
+
+
 ################################################################################
 # 2. MEDIAN
 ################################################################################
 def running_medians(iterable):
     ### BEGIN SOLUTION
+    minH = Heap(lambda x: -x)
+    maxH = Heap()
+    vals = []
+    for x in iterable:
+        minH.add(x)
+        maxH.add(minH.peek())
+        minH.pop()
+        if len(minH) < len(maxH):
+            minH.add(maxH.peek())
+            maxH.pop()
+        if len(minH) > len(maxH):
+            vals.append(minH.peek())
+        else:
+            vals.append((minH.peek() + maxH.peek()) *.5 )
+    return vals
     ### END SOLUTION
 
 ################################################################################
@@ -169,11 +218,16 @@ def test_median_3():
     tc.assertEqual(m_mid, running[50000])
     tc.assertEqual(m_final, running[-1])
 
+
+# In[38]:
+
+
 ################################################################################
 # 3. TOP-K
 ################################################################################
 def topk(items, k, keyf):
     ### BEGIN SOLUTION
+    pass
     ### END SOLUTION
 
 ################################################################################
@@ -229,3 +283,33 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# In[ ]:
+
+
+# top = [items[i] for i in range(len(items))]
+#     f = {i: get_age(i) for i in (items)}
+#     for j in range(k):
+#         if items[j] in f.keys():
+#             f[items[j]] += 1
+#         else:
+#             f[items[j]] = 1
+#         top[k] = items[j]
+#         i = top.index(items[j])
+#         i -= 1
+
+#         while i >= 0:
+#             if(f[top[i]] < f[top[i + 1]]):
+#                 t = top[i]
+#                 top[i] = top[i + 1]
+#                 top[i + 1] = t
+#             elif((f[top[i]] == f[top[i + 1]]) and (top[i] > top[i + 1])):
+#                 t = top[i]
+#                 top[i] = top[i + 1]
+#                 top[i + 1] = t
+#             else:
+#                 break
+#             i -= 1
+#         i = 0
+#     return top
